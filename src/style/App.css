@@ -30,3 +30,6 @@ body {
     line-height: 1.447em;
     margin: 0px;
 }
+.todo-item input {
+    margin-right: 15px;
+}
