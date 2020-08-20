@@ -1,27 +1,13 @@
 import React from "react";
+import axios from "axios"
 import uuid from "uuid"
 import Header from "./layout/Header";
 import Todos from "./Todos"
 import AddTodo from "./AddTodo"
+
 class TodoApp extends React.Component{
 	state = {
-		todos:[
-			{
-				id: 1,
-				title: "setup development enviroment",
-				complete: true
-			},
-			{
-				id: 2,
-				title: "Develop website and add content",
-				complete: false
-			},
-			{
-				id: 3,
-				title: "Deploy to live server",
-				complete: false
-			}
-		]
+		todos:[]
 	};
 	handleCheckboxChange = id => {
 		
@@ -36,25 +22,60 @@ class TodoApp extends React.Component{
 		});
 	}
 	deleteTodo = id =>{
-		console.log ("deleted", id);
-		this.setState({
-			todos: [
-				...this.state.todos.filter(todo => {
-					return todo.id !== id;
+		// console.log ("deleted", id);
+		// this.setState({
+		// 	todos: [
+		// 		...this.state.todos.filter(todo => {
+		// 			return todo.id !== id;
+		// 		})
+		// 	]
+		// });
+		axios.delete('https://jsonplaceholder.typicode.com/todos/${id}')
+				.then(response => {
+					this.setState({
+						todos: [
+							...this.state.todos.filter(todo =>{
+								return todo.id !== id;
+							})
+						]
+					})
 				})
-			]
-		});
 	}
 	addTodo = title => {
 		console.log(title);
-		const newTodo = {
-			id: uuid.v4(),
+		// const newTodo = {
+		// 	id: uuid.v4(),
+		// 	title: title,
+		// 	complete: false
+		// };
+		// this.setState({
+		// 	todos: [...this.state.todos, newTodo]
+		// });
+		const todoData = {
 			title: title,
 			complete: false
-		};
-		this.setState({
-			todos: [...this.state.todos, newTodo]
-		});
+		}
+		axios.post("https://jsonplaceholder.typicode.com/todos",todoData)
+				.then(response => {
+					console.log(response.data)
+					this.setState({
+						todos: [...this.state.todos,response.data]
+					})
+				})
+	}
+	componentDidMount(){
+		//Giới hạn số lượng data trả về ( mục đích phân trang hoặc đơn giản chỉ lấy it data demo)
+		// cách 1 axios.get("https://jsonplaceholder.typicode.com/todos?_limit=10")
+		//cách 2 *recommend*
+		const config = {
+			params: {
+				_limit: 5
+			}
+		}
+
+		//tạo Get request để lấy danh sách todos
+		axios.get("https://jsonplaceholder.typicode.com/todos",config)
+				.then(response => this.setState({ todos: response.data}));
 	}
 	render() {
 		
