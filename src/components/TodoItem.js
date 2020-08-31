@@ -13,6 +13,7 @@ class TodoItem extends React.Component {
 					{title}
 				</span>
 				<button className="btn-style" onClick={() => this.props.deleteTodo(id)}> X </button>
+				<button className="btn-style" onClick= {() =>this.props.logSomething("test") }> TEST </button>
 			</li>
 		);
 	}

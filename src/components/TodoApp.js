@@ -130,7 +130,9 @@ function TodoApp(){
 						})
 				});
 	};
-
+	const consoleLogSomething = something => {
+		console.log(something)
+	}
 	useEffect(() => {
 		const config = {
 				params: {
@@ -146,7 +148,7 @@ function TodoApp(){
 		<div className="container">
 			<Header />
 			<AddTodo  addTodo={addTodo}/>
-			<Todos todos={state.todos} handleChange= {handleCheckboxChange} deleteTodo = {deleteTodo} />
+			<Todos todos={state.todos} handleChange= {handleCheckboxChange} deleteTodo = {deleteTodo} logSomething = {consoleLogSomething} />
 			
 		</div>
 	);
